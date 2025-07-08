@@ -1,0 +1,15 @@
+{
+  "name": "learning_to_create_server",
+  "version": "1.0.0",
+  "description": "Learing to create a server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Pratika",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
