@@ -1,0 +1,78 @@
+openapi: 3.1.0
+info:
+  title: Sample API
+  description: First Swagger
+  version: 0.1.9
+servers:
+- url: http://localhost:4000/api/v1
+  description: localhost version of app.
+- url: https://localhost:4000/api/v1
+  description: Dummy url, it doesn't work.
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /students:
+    get:
+      summary: returns student attendance.
+      responses:
+        '200': #status code
+          description: returns an object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: 
+                    type: number
+                  present:
+                    type: number
+                  absent: 
+                    type: number
+    post:
+      summary: returns student attendance.
+      responses:
+        '200': #status code
+          description: returns an object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: 
+                    type: number
+                  present:
+                    type: number
+                  absent: 
+                    type: number
+  /{token}:                  
+    get:
+      summary: returns whatever is in params.
+      parameters:
+        - name: token
+          in: path
+          default: 1
+          schema:
+            type: string
+
+      responses:
+        '200': #status code
+          description: returns an object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  params: 
+                    type: number
+                  
+
+                  
