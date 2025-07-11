@@ -1,0 +1,252 @@
+openapi: "3.0.0"
+info: 
+  title: Learning express and swagger.
+  description: Swagger documentation.
+  version: 1.1.0
+
+# servers:
+#   - url: "http://localhost:4000/api/v1"
+#     description: local host url
+#   - url: "https://localhost:4000/api/v1"
+#     description: dummy url
+
+servers:
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: local host url
+    variables:
+      protocol: 
+        enum:
+          - http
+          - https
+        default: http
+      version:
+        enum:
+          - v1
+          - v2
+        default: v1
+
+
+components:
+  securitySchemes:
+    cookieAuth: 
+      name: token
+      type: apiKey
+      in: cookie
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /:
+    summary: Welcome string
+    description: Testing string response
+    get:
+      tags:
+        - Landing
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+  /subject:
+    description: Testing objects response
+    get:
+      tags: 
+        - Subjects  
+      summary: returns a subject
+      responses:
+        "200": 
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:  #properties only come for objects
+                  id: 
+                    type: number
+                  subject_name: 
+                    type: string
+        "400": 
+          description: Bad request
+        "500": 
+          description: Internal server error
+    post:
+      tags: 
+        - Subjects 
+      summary: posts a subject
+      responses:
+        "200": 
+          description: success response
+        "400": 
+          description: Bad request
+        "500": 
+          description: Internal server error
+  /subjects:
+    description: Testing array response
+    get:
+      tags: 
+        - Subjects  
+      summary: returns a list of subjects
+      responses:
+        "200": 
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:  #properties only come for objects
+                    id: 
+                      type: number
+                    subject_name: 
+                      type: string
+        "400": 
+          description: Bad request
+        "500": 
+          description: Internal server error
+    post:
+      tags: 
+        - Subjects 
+      summary: posts a list of subjects
+      responses:
+        "200": 
+          description: success response
+        "400": 
+          description: Bad request
+        "500": 
+          description: Internal server error
+  /mainSubject/{subjectId}:
+    description: Returns subject based on req id
+    get:
+      tags: 
+        - Subjects  
+      summary: returns subject based on subject id
+      parameters:
+        - name: subjectId
+          in: path
+          required: true
+          default: 12
+          scehma:
+            type: string
+      responses:
+        "200": 
+          description: success response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:  #properties only come for objects
+                    id: 
+                      type: number
+                    subject_name: 
+                      type: string
+        "400": 
+          description: Bad request
+        "500": 
+          description: Internal server error
+  /addSubject:
+    post:
+      tags:
+        - Subjects
+      summary: Adds a new subject
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject_name:
+                  type: string
+                id:
+                  type: string
+      responses:
+        "200":
+          description: successfully added a new subject
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "400":
+          description: bad request
+        "500":
+          description: server error
+
+
+
+  /subjectquery:
+    description: learning about query
+    get:
+      tags:
+        - Subjects
+      parameters:
+        - name: activity_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: ["test","Assignment","exam"]
+        - name: activity_day
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: ["Monday","Tuesday","Wednesday"]
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              scehma:
+                type: object
+                properties:
+                  activity_type:
+                    type: string
+                  activity_day:
+                    type: string
+        400:
+          description: bad request
+  /subject_file_upload:
+    description: learning file/image subject_file_upload
+    post:
+      tags:
+        - Subjects
+      parameters:
+        - in: headers
+          name: auth
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200": 
+          description: success response
+        "400": 
+          description: Bad request
+        "500": 
+          description: Internal server error
+
+
+
+
+
+    
+        
+    
+
+    
+
+        
+    
