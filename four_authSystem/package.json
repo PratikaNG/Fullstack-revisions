@@ -1,0 +1,21 @@
+{
+  "name": "four_authsystem",
+  "version": "1.0.0",
+  "description": "Revising backend while learning to work with database.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "Backend",
+    "database"
+  ],
+  "author": "NG",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.2"
+  }
+}
