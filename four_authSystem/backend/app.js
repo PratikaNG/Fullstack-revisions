@@ -2,13 +2,15 @@ require('dotenv').config()
 require("./config/databse.js").connect()  //running database connection
 const express = require('express');
 const app = express();
-// Express cannot handle the json file directly so we need to do
-app.use(express.json()) 
 const User = require("./model/user.js")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const auth = require("./middleware/auth.js")
+const cookieParser = require('cookie-parser')
 const {SECRET_KEY} = process.env
+// Express cannot handle the json file directly so we need to do
+app.use(express.json()) 
+app.use(cookieParser()) 
 app.get('/',(req,res)=>{
     res.send("Welcome")
 })
@@ -66,7 +68,20 @@ app.post('/login',async(req,res)=>{
             const token = jwt.sign({user_id:user._id,email,password},SECRET_KEY,{expiresIn:"2h"})
             user.token = token
             user.password = undefined
-            res.status(200).json(user)
+            // res.status(200).json(user)
+
+            // if you want to use cookies
+            const options = {
+                // expires in 3days -> 3 * 24 * 60mins * 60secs * 1000
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly: true
+            }
+            // NOTE: it is res.status(200).cookie not res.status(200).cookies
+            res.status(200).cookie('token',token,options).json({
+                success:true,
+                token,
+                user
+            })
         }
 
 
