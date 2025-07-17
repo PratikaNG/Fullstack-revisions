@@ -1,0 +1,28 @@
+{
+  "name": "forms_images",
+  "version": "1.0.0",
+  "description": "Learning to handle files, images and forms",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "cloudinary",
+    "ejs",
+    "files",
+    "forms",
+    "images"
+  ],
+  "author": "NG",
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^2.7.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-fileupload": "^1.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
