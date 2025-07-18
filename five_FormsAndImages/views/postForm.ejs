@@ -8,17 +8,23 @@
     <title>POST Form</title>
 </head>
 <body class="bg-dark text-white">
-    <div class="container">
-        <h1>POST Form</h1>
-        <form >
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    <div class="container mt-3 col-4 col-offset-6">
+        <h1>Post Form</h1>
+        <form method="POST" action="/mypost" enctype="multipart/form-data">
+            <!-- enctype="multipart/form-data"  helps in handling fileupload from frontend -->
+  <div class="mb-3 >
+    <label for="firstname" class="form-label">Firstname</label>
+    <input type="text" name="firstname" class="form-control" id="firstname" aria-describedby="firstname">
+    <div id="firstname" class="form-text">We'll never share your email with anyone else.</div>
   </div>
   <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
+    <label for="lastname" class="form-label">Lastname</label>
+    <input type="text"  name="lastname" class="form-control" id="lastname">
+  </div>
+  <div class="mb-3">
+    <label for="samplefile" class="form-label">Sample file</label>
+    <input type="file"  name="samplefile" multiple class="form-control" id="lastname"> 
+    <!-- <input type="file"  name="samplefile" class="form-control" id="lastname">  only single file can be uploaded-->
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
