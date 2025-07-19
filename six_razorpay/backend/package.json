@@ -1,0 +1,22 @@
+{
+  "name": "razorpay",
+  "version": "1.0.0",
+  "description": "Learning razorpay basics",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "razorpay"
+  ],
+  "author": "NG",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "razorpay": "^2.9.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
