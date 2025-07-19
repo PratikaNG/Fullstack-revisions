@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay</title>
+</head>
+<body>
+    <button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    const rpbutton = document.getElementById("rzp-button1")
+    rpbutton.addEventListener("click",async(event)=>{
+        const response = await fetch('/orders',{
+            method:"POST",
+            headers:{
+                'Content-Type':'application.json'
+            },
+            body:JSON.stringify({amount:500})
+        })
+        // const response = 
+        const {order} = response
+        var options = {
+            "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+            "amount": "50000", // Amount is in currency subunits. 
+            "currency": "INR",
+            "description": "Test Transaction",
+            "order_id": order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open()
+    })
+
+
+</script>
+</body>
+</html>
