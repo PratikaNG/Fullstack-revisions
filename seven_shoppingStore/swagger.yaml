@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  title: Shopping app
+  description: learning api and backend
+  version: 1.0.0
+
+
+# servers:
+#   - url: "http://localhost:4000/api/v1"
+#     description: local host url
+#   - url: "https://localhost:4000/api/v1"
+#     description: dummy url
+
+servers:
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: local host url
+    variables:
+      protocol: 
+        enum:
+          - http
+          - https
+        default: http
+      version:
+        enum:
+          - v1
+          - v2
+        default: v1
+
+components:
+  securitySchemes:
+    cookieAuth: 
+      name: token
+      type: apiKey
+      in: cookie
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+
+paths:
+  /:
+    get:
+      description: home page
+      responses:
+        200:
+          description: Home page
+          content:
+            application/json:
+              schema:
+                type: string
+
+
+
