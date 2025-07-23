@@ -15,8 +15,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 // 6.cookies and file middleware
-app.use(cookieParser())
-app.use(fileUpload())
+app.use(cookieParser());
+app.use(fileUpload());
 
 
 // 4.bring in logger -> morgan -> morgan needs to be at the top of all the routes
@@ -26,11 +26,13 @@ app.use(morgan("tiny")) //tiny is a package of morgan that gives us logs like th
 
 
 //2. bring all the routes here
-const home = require("./routes/home")
+const home = require("./routes/home.js");
+const user = require("./routes/user.js");
 
 
 //3. write router middlewares here
-app.use("/api/v1",home)
+app.use("/api/v1",home);
+app.use("/api/v1",user);
 
 
 module.exports = app
