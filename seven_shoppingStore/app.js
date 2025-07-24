@@ -10,13 +10,20 @@ const swaggerUi = require("swagger-ui-express")
 const YAML = require("yamljs")
 const swaggerDocument = YAML.load("./swagger.yaml")
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument))
+
+//8. using ejs -> ejs comes as a part of middleware and it uses view engine, hence we will set the view engine as below
+app.set('view engine','ejs')
+
 // 5. bring in regular middlewares
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 // 6.cookies and file middleware
 app.use(cookieParser());
-app.use(fileUpload());
+app.use(fileUpload({
+    useTempFiles:true,
+    tempFileDir:"/tmp"
+}));
 
 
 // 4.bring in logger -> morgan -> morgan needs to be at the top of all the routes
@@ -33,6 +40,12 @@ const user = require("./routes/user.js");
 //3. write router middlewares here
 app.use("/api/v1",home);
 app.use("/api/v1",user);
+
+// 9. testing fileupload
+
+app.get("/signuptest",(req,res)=>{
+    res.render("signupForm")
+})
 
 
 module.exports = app
