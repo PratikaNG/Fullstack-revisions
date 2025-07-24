@@ -8,7 +8,7 @@ const router = express.Router()
 const {home,dummy} = require("../controllers/homeController")
 
 
-router.route("/api/v1").get(home)
+router.route("/").get(home)
 router.route("/dummy").get(dummy)
 
 module.exports = router
