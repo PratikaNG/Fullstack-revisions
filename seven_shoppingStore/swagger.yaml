@@ -48,6 +48,73 @@ paths:
             application/json:
               schema:
                 type: string
+  /signup:
+    post:
+      description: signup
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name: 
+                 type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Sign up success
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+  /login:
+    post:
+      description: login
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Login up success
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+  /logout:
+    get:
+      description: logout
+      responses:
+        200:
+          description: Logout up success
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+  
+
 
 
 
