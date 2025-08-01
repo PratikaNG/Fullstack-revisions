@@ -10,7 +10,7 @@ const mailHelper = async(data)=>{
     },
     });
 
-
+    c
   const message = {
     from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
     to: data.toEmail,
@@ -18,7 +18,7 @@ const mailHelper = async(data)=>{
     text: data.message, // plain‑text body
     // html: "<b>Hello world?</b>", // HTML body
   }
-  await transporter.sendMail();
+  await transporter.sendMail(message);
 
   console.log("Message sent:", info.messageId);
 }
