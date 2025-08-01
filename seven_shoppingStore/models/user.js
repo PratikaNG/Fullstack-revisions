@@ -47,10 +47,10 @@ const userSchema = new mongoose.Schema({
 
 //2. password encryption before save
 
-userSchema.pre('save',async function(){
+userSchema.pre('save',async function(next){
     // if password field is not modified/touched then go ahead and do next
     if(!this.isModified('password')){
-        return next
+        return next();
     }
     // if password field is modified/touched then encrypt it using bcryptjs
     this.password = await bcrypt.hash(this.password, 10)

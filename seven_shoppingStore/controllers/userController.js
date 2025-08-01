@@ -5,6 +5,8 @@ const customError = require("../utils/customError")
 const User = require("../models/user")
 const cookieToken = require("../utils/cookieToken")
 const cloudinary = require("cloudinary").v2
+const mailHelper = require("../utils/mailHelper")
+const crypto = require('crypto')
 
 exports.signup = BigPromise(async(req,res,next)=>{
      // let result ;
@@ -76,7 +78,7 @@ exports.login = BigPromise(async(req,res,next)=>{
      cookieToken(user,res)
 })
 
-exports.logout = BigPromise((req,res,next)=>{
+exports.logout = BigPromise(async(req,res,next)=>{
      // 1. clear the token as in set it to null and set its expiry to Date.now()
      // 2. send out the response for confirmation
      // 3. set up the logout route in user route and test it as a get request
@@ -90,3 +92,83 @@ exports.logout = BigPromise((req,res,next)=>{
           message:"Logged out successfully."
      })
 })
+
+exports.forgotPassword = BigPromise(async(req,res,next)=>{
+     const {email} = req.body
+
+     if(!email){
+          return next(new customError("Email is required",404))
+     }
+
+     const user = await User.findOne({email})
+     if(!user){
+          return next(new customError("Email not found",400))
+     }
+
+     const forgotToken = user.getForgotPasswordToken()
+     await user.save({validateBeforeSave:false})
+
+     const myUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${forgotToken}`
+     console.log("myURL: ",myUrl)
+     const message = `Please copy paste this link in your URl and hit enter \n \n ${myUrl} `
+     try {
+          // fix mailtrap account, to recieve the mail
+          // await mailHelper({
+          //      toEmail: user.email,
+          //      subject: `Reset password url`,
+          //      message
+          // })
+          res.status(200).json({
+               success:true,
+               message
+          })
+     } catch (error) {
+          user.forgotPasswordToken = undefined;
+          user.forgotPasswordExpiry = undefined;
+          await user.save({validateBeforeSave:false})
+          console.log("Here-3",error)
+          return next(new customError(error.message,500))
+     }
+
+})
+
+exports.resetPassword = BigPromise(async(req,res,next)=>{
+     // 1. grab the token
+     // 2. encrypt the token
+     // 3. find user based on encrypted token
+     // 4. make sure to only find the user who has asked to reset password
+     // 5. If user not found, throw an error
+     const token = req.params.token
+
+     const encryptedtoken = crypto
+     .createHash('sha256')
+     .update(token)
+     .digest('hex');
+
+     const user = await User.findOne({
+          encryptedtoken,
+          forgotPasswordExpiry: {$gt: Date.now()}   
+     });
+     //$gt implies time greater than.
+     //forgotPasswordExpiry:{$gt: Date.now()} implies time greater than Date.now()
+     console.log("User",user)
+     if(!user){
+          return next(new customError("Token is invalid or expired",400))
+     }
+
+     if(req.body.password !== req.body.confirmPassword){
+          return next(new customError("Password and confirm password do not match",400))
+     }
+
+     user.password = req.body.password
+     user.forgotPasswordToken = undefined;
+     user.forgotPasswordExpiry = undefined;
+     await user.save();
+
+     // send a token or json response
+     cookieToken(user,res)
+})
+
+
+// These are the users, let the user reset his password if it exists
+//If user exists, store the new password entered by him and compare if they match and set the new password of the user.
