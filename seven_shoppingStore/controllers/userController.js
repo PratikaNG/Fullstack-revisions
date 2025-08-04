@@ -24,8 +24,7 @@ exports.signup = BigPromise(async(req,res,next)=>{
      if(!req.files){
           return new customError("Photo is required for signup",400)
      }
-     let
-          file = req.files.photo;  
+     let file = req.files.photo;  
            //frontend should know that they should send the images on "photo" field
            const result = await cloudinary.uploader.upload(file.tempFilePath,{
                folder:"users",
@@ -169,6 +168,82 @@ exports.resetPassword = BigPromise(async(req,res,next)=>{
      cookieToken(user,res)
 })
 
+exports.getLoggedInUserDetails = BigPromise(async(req,res,next)=>{
+     // 1. Only for user that's logged in
+     // 2. Find the user by id
+     const user = await User.findById(req.user.id)
+     res.status(200).json({
+          success: true,
+          user,
+     })
+})
 
-// These are the users, let the user reset his password if it exists
-//If user exists, store the new password entered by him and compare if they match and set the new password of the user.
+exports.changePassword = BigPromise(async(req,res,next)=>{
+     const userId = req.user.id;
+     const user = await User.findById(userId).select("+password");
+
+     // 1. Accept old and new password
+     // 2. Check if old password is correct
+     // 3. Id correct then update the password with newpassword
+     // 4. Save the user
+     // 5. update cokieToken
+     const isCorrectOldPassword = await user.isPasswordValid(req.body.oldPassword)
+     if(!isCorrectOldPassword){
+          return next(new customError("Old password is incorrect",404))
+     }
+     user.password = req.body.newPassword;
+
+     await user.save();
+
+     cookieToken(user,res);
+
+})
+
+exports.updateUserDetails = BigPromise(async(req,res,next)=>{
+     // 1. Fetch the user
+     // 2. Send res
+          console.log("Came here")
+
+     // check the fields
+     const newData = {
+          name : req.body.name,
+          email : req.body.email,
+     }
+     // check if photo is being updated
+
+     if(req.files !== ''){
+          // find imageId.
+          const user = await User.findById(req.user.id);
+          const imageId = user.photo.id;
+          // destroy from cloudinary
+          const response = await cloudinary.uploader.destroy(imageId);
+          
+          // upload the new photo
+          let file = req.files.photo; 
+          const result = await cloudinary.uploader.upload(file.tempFilePath,{
+               folder:"users",
+               width:150,
+               crop:"scale"
+          })
+
+          newData.photo = {
+               id: result.public_id,
+               secure_url: result.secure_url
+          }
+
+
+     }
+
+     const user = await User.findByIdAndUpdate(req.user.id, newData, {
+          new: true,
+          runValidators: true,
+          useFindAndModify: false,
+     })
+
+     res.status(200).json({
+          success: true,
+     })
+
+})
+
+
