@@ -35,11 +35,13 @@ app.use(morgan("tiny")) //tiny is a package of morgan that gives us logs like th
 //2. bring all the routes here
 const home = require("./routes/home.js");
 const user = require("./routes/user.js");
+const product = require("./routes/productRoute.js");
 
 
 //3. write router middlewares here
 app.use("/api/v1",home);
 app.use("/api/v1",user);
+app.use("/api/v1",product);
 
 // 9. testing fileupload
 
