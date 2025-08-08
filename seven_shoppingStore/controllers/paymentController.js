@@ -2,14 +2,14 @@ const BigPromise = require("../middlewares/bigPromise")
 const customError = require("../utils/customError")
 const {stripe} = require("stripe")(process.env.STRIPE_SECRET  )
 
-exports.sendStripeKey = BigPromise(async(req,res)=>{
+exports.sendStripeKey = BigPromise(async(req,res,next)=>{
     // send res
     res.status(200).json({
         stripe_key: process.env.STRIPE_API_KEY  //its safe to give this key, but not STRIPE_SECRET
     })
 })
 
-exports.captureStripePayments = BigPromise(async(req,res)=>{
+exports.captureStripePayments = BigPromise(async(req,res,next)=>{
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: req.body.amount,
@@ -26,14 +26,14 @@ exports.captureStripePayments = BigPromise(async(req,res)=>{
         // you can optionally send id too.
     })
 })
-exports.sendRazorPayKey = BigPromise(async(req,res)=>{
+exports.sendRazorPayKey = BigPromise(async(req,res,next)=>{
     // send res
     res.status(200).json({
         stripe_key: process.env.RAZORPAY_API_KEY  
     })
 })
 
-exports.captureRazorPayPayments = BigPromise(async(req,res)=>{
+exports.captureRazorPayPayments = BigPromise(async(req,res,next)=>{
 
     var instance = new Razorpay({ key_id: 'YOUR_RAZORPAY_API_KEY_ID', key_secret: 'YOUR_RAZORPAY_SECRET' })
     const options = {

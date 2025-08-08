@@ -12,7 +12,7 @@ exports.testProduct = BigPromise(
     })
 })
 
-exports.addProduct = BigPromise(async(req,res)=>{
+exports.addProduct = BigPromise(async(req,res,next)=>{
     // 1. handle images
     let imagesArray = []
     if(!req.files ){
